@@ -10,11 +10,15 @@ A chromium extension to replace github activity colors.
 
 This plugin only works on [github.com](https://github.com) user pages.
 
-<!-- When not on the mentioned page, the plugin will display the following message : -->
+When not on the mentioned page, the plugin will display the following message :
+
+![]()
 
 ## Settings
 
-<!--  -->
+Here are the available color schemes :
+
+![](screenshots/Schemes.PNG)
 
 ## Installation
 
