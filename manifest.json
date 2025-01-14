@@ -6,7 +6,8 @@
 	"author": "Koro <matthews.r.mike@gmail.com>",
 	"permissions": [
 		"activeTab",
-		"tabs"
+		"tabs",
+		"storage"
 	],
 	"host_permissions": [
 		"https://github.com/*"
