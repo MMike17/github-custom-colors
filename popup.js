@@ -1,4 +1,4 @@
-import { GetCurrentScheme, GetCurrentURL, GetScemeColors, GetScemeName, maxSceheme, SaveScheme } from "./utils.js";
+import { GetCurrentScheme, GetCurrentTab, GetCurrentURL, GetScemeColors, GetScemeName, IsRightPage, maxSceheme, SaveScheme } from "./utils.js";
 
 const exampleCount = 5;
 
@@ -6,39 +6,48 @@ const exampleCount = 5;
 document.addEventListener("DOMContentLoaded", DrawPopup());
 
 function DrawPopup() {
-	GetCurrentURL((url) => {
-		if (!url.includes("github.com/")) {
-			DisplayInPopup("<div class='title'>Go to github.com to manage your color schemes.</div>");
-			return;
+	GetCurrentURL(url => {
+		switch (IsRightPage(url)) {
+			case 1:
+				DisplayInPopup("<div class='title'>Go to github.com to manage your color schemes.</div>");
+				return;
+			case 2:
+				DisplayInPopup("<div class=\"title\">This extension only works on user pages.</div>");
+				return;
 		}
 
-		if (url.split("/").length != 4) {
-			DisplayInPopup("<div class=\"title\">This extension only works on user pages.</div>");
-			return;
-		}
+		GetCurrentTab(tab => {
+			chrome.tabs.sendMessage(tab.id, "Check-page", function (check) {
+				if (!check)
+					DisplayInPopup("<div class=\"title\">This extension only works on the overview section.</div>");
+				else {
+					GetCurrentScheme((currentScheme) => {
+						let display = "<div class='title'>Color schemes</div><div class=\"schemes-holder\">";
 
-		GetCurrentScheme((currentScheme) => {
-			let display = "<div class='title'>Color schemes</div><div class=\"schemes-holder\">";
+						for (let i = 0; i < maxSceheme; i++) {
+							const name = GetScemeName(i);
+							const colors = GetScemeColors(i, exampleCount);
+							display += GetSchemeDisplay(name, colors, i == currentScheme);
+						}
 
-			for (let i = 0; i < maxSceheme; i++) {
-				const name = GetScemeName(i);
-				const colors = GetScemeColors(i, exampleCount);
-				display += GetSchemeDisplay(name, colors, i == currentScheme);
-			}
+						DisplayInPopup(display + "</div>");
 
-			DisplayInPopup(display + "</div>");
+						// register click events
+						const buttons = document.getElementsByClassName("scheme");
 
-			// register click events
-			const buttons = document.getElementsByClassName("scheme");
-
-			for (let i = 0; i < maxSceheme; i++) {
-				buttons[i].addEventListener("click", () => {
-					SaveScheme(i);
-					chrome.runtime.sendMessage("trigger-repaint");
-					DrawPopup();
-				});
-			}
+						for (let i = 0; i < maxSceheme; i++) {
+							buttons[i].addEventListener("click", () => {
+								SaveScheme(i);
+								chrome.runtime.sendMessage("trigger-repaint");
+								DrawPopup();
+							});
+						}
+					});
+				}
+			});
 		});
+
+		return;
 	});
 }
 

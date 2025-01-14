@@ -1,4 +1,4 @@
-export const maxSceheme = 2;
+export const maxSceheme = 1;
 const saveKey = "scheme";
 
 export function GetCurrentURL(onResult) {
@@ -7,7 +7,7 @@ export function GetCurrentURL(onResult) {
 	});
 }
 
-async function GetCurrentTab(onResult) {
+export async function GetCurrentTab(onResult) {
 	let queryOptions = { active: true, currentWindow: true };
 	let [tab] = await chrome.tabs.query(queryOptions);
 	onResult(tab);
@@ -41,23 +41,7 @@ export function SaveScheme(scheme) {
 export function GetScemeName(scheme) {
 	switch (scheme) {
 		case 0:
-			return "Dawn";
-		case 1:
-			return "Depth";
-		case 2:
-			return "Forest";
-		case 3:
-			return "Skyfall";
-		case 4:
-			return "Retro";
-		case 5:
-			return "Alien";
-		case 6:
-			return "Dracula";
-		case 7:
-			return "Dragon";
-		// case :
-		// return "Test";
+			return "Test";
 	}
 }
 
@@ -65,24 +49,18 @@ export function GetScemeName(scheme) {
 export function GetScemeColors(scheme, count) {
 	switch (scheme) {
 		case 0:
-			return GetLerps("#6b1d1d", "#f2d234", count);
-		case 1:
-			return GetLerps("#483150", "#64e2ba", count);
-		// case 2:
-		// 	return GetLerps("#2f413b", "#cbe84b", count);
-		// case 3:
-		// 	return GetLerps("#343f4f", "#ff5d8e", count);
-		// case 4:
-		// 	return GetLerps("#313131", "#efefef", count);
-		// case 5:
-		// 	return GetLerps("#562335", "#93c9ed", count);
-		// case 6:
-		// 	return GetLerps("#5c1b26", "#fc3535", count);
-		// case 7:
-		// 	return GetLerps("#711d12", "#59e7d2", count);
-		// case :
-		// return GetLerps("#000000", "#ffffff", count); // base
+			return GetLerps("#161b22", "#39d353", count);
 	}
+}
+
+export function IsRightPage(url) {
+	if (!url.includes("github.com/"))
+		return 1; // Not github
+
+	if (url.split("/").length != 4)
+		return 2; // Too deep
+
+	return 0; // Ok
 }
 
 function GetLerps(color1, color2, count) {

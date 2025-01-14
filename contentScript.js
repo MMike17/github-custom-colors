@@ -4,32 +4,55 @@
 	const htmlClass = "ContributionCalendar-day";
 	const dataAtr = "data-level";
 	const styleAtr = "style";
-	const colorAtr = "background-color";
-	const maxSceheme = 2;
+	const colorAtrs = ["background-color", "fill"];
+	const maxSceheme = 1;
 	const colorsCount = 5;
+	const maxRepaintTimeout = 2000;
+
+	let repaintTimer = 0;
 
 	// Invoked when we receive a message
 	chrome.runtime.onMessage.addListener((request, sender, response) => {
-		if (request == "Repaint")
+		if (request == "Check-page") {
+			const tab = document.getElementById("overview-tab");
+			response(tab != null && tab.className != null && tab.className.includes(" selected"));
+		}
+
+		if (request == "Repaint") {
+			repaintTimer = 0;
 			Repaint();
+		}
+
+		return true;
 	});
 
 	function Repaint() {
 		GetCurrentScheme((schemeIndex) => {
+			repaintTimer += 100;
+
 			const elements = document.getElementsByClassName(htmlClass);
 
 			// rescheduling repaint because page is not ready
 			if (elements.length == 0) {
-				setTimeout(Repaint, 100);
+				if (repaintTimer < maxRepaintTimeout)
+					setTimeout(Repaint, 100);
+
 				return;
 			}
 
+			repaintTimer = 0;
 			const colors = GetScemeColors(schemeIndex, colorsCount);
 
 			for (const element of elements) {
 				if (element.hasAttribute(dataAtr) && element.hasAttribute(styleAtr)) {
 					const level = element.getAttribute(dataAtr);
-					element.setAttribute(styleAtr, element.getAttribute(styleAtr) + "; " + colorAtr + ": " + colors[level]);
+					const color = colors[level];
+					let moreStyle = element.getAttribute(styleAtr);
+
+					for (let atr of colorAtrs)
+						moreStyle += "; " + atr + ": " + color;
+
+					element.setAttribute(styleAtr, moreStyle);
 				}
 			}
 
@@ -59,21 +82,7 @@
 	function GetScemeColors(scheme, count) {
 		switch (scheme) {
 			case 0:
-				return GetLerps("#6b1d1d", "#f2d234", count);
-			case 1:
-				return GetLerps("#483150", "#64e2ba", count);
-			// case 2:
-			// 	return GetLerps("#2f413b", "#cbe84b", count);
-			// case 3:
-			// 	return GetLerps("#343f4f", "#ff5d8e", count);
-			// case 4:
-			// 	return GetLerps("#313131", "#efefef", count);
-			// case 5:
-			// 	return GetLerps("#562335", "#93c9ed", count);
-			// case 6:
-			// 	return GetLerps("#5c1b26", "#fc3535", count);
-			// case 7:
-			// 	return GetLerps("#711d12", "#59e7d2", count);
+				return GetLerps("#161b22", "#39d353", count);
 		}
 	}
 
