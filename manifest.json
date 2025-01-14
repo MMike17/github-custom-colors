@@ -1,0 +1,35 @@
+{
+	"manifest_version": 3,
+	"name": "github custom colors",
+	"version": "1.0",
+	"description": "A chromium extension to replace github activity colors.",
+	"author": "Koro <matthews.r.mike@gmail.com>",
+	"permissions": [
+		"activeTab",
+		"tabs"
+	],
+	"host_permissions": [
+		"https://github.com/*"
+	],
+	"background": {
+		"service_worker": "background.js"
+	},
+	"content_scripts": [
+		{
+			"matches": [
+				"https://github.com/*"
+			],
+			"js": [
+				"contentScript.js"
+			]
+		}
+	],
+	"action": {
+		"default_icon": {
+			"16": "assets/icon.png",
+			"24": "assets/icon.png",
+			"32": "assets/icon.png"
+		},
+		"default_popup": "popup.html"
+	}
+}
