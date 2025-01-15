@@ -8,11 +8,13 @@ A chromium extension to replace github activity colors.
 
 ## Usage
 
-This plugin only works on [github.com](https://github.com) user pages.
+This plugin only works on [github.com](https://github.com) user pages, in the overview section.
 
-When not on the mentioned page, the plugin will display the following message :
+When not on the mentioned page, the plugin will display the following messages :
 
-![]()
+![](screenshots/Message1.PNG)
+![](screenshots/Message2.PNG)
+![](screenshots/Message3.PNG)
 
 ## Settings
 
