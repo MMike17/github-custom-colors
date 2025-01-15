@@ -5,7 +5,7 @@
 	const dataAtr = "data-level";
 	const styleAtr = "style";
 	const colorAtrs = ["background-color", "fill"];
-	const maxSceheme = 1;
+	const maxSceheme = 8;
 	const colorsCount = 5;
 	const maxRepaintTimeout = 2000;
 
@@ -78,11 +78,24 @@
 		);
 	}
 
-	// TODO : Adjust those colors
 	function GetScemeColors(scheme, count) {
 		switch (scheme) {
 			case 0:
-				return GetLerps("#161b22", "#39d353", count);
+				return GetLerps("#291717", "#f4c024", count);
+			case 1:
+				return GetLerps("#241827", "#39e7d2", count);
+			case 2:
+				return GetLerps("#151d1a", "#d3e84b", count);
+			case 3:
+				return GetLerps("#191d26", "#ff759e", count);
+			case 4:
+				return GetLerps("#1e1e1e", "#e1e1e1", count);
+			case 5:
+				return GetLerps("#2c161e", "#77d5f7", count);
+			case 6:
+				return GetLerps("#2d1a1d", "#fc3e3e", count);
+			case 7:
+				return GetLerps("#2e1815", "#59e7d2", count);
 		}
 	}
 
